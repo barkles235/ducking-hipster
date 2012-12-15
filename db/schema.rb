@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121215190159) do
+ActiveRecord::Schema.define(:version => 20121215191942) do
 
   create_table "posts", :force => true do |t|
     t.text     "body"
@@ -25,8 +25,9 @@ ActiveRecord::Schema.define(:version => 20121215190159) do
     t.string   "password"
     t.string   "password_digest"
     t.text     "bio"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+    t.string   "password_confirmation"
   end
 
 end

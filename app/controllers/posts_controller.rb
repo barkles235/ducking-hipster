@@ -1,4 +1,7 @@
 class PostsController < ApplicationController
+  before_filter :signed_in_user
+#  before_filter :correct_user, only: :destroy
+
   # GET /posts
   # GET /posts.json
   def index
@@ -24,12 +27,16 @@ class PostsController < ApplicationController
   # GET /posts/new
   # GET /posts/new.json
   def new
-    @post = Post.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @post }
+    @post = current_user.posts.build(params[:post])
+    if @post.save
+      flash[:success] = "post created!"
+      redirect_to 'posts#index'
     end
+    # @post = Post.new
+    # respond_to do |format|
+    #   format.html # new.html.erb
+    #   format.json { render json: @post }
+    # end
   end
 
   # GET /posts/1/edit
@@ -80,4 +87,12 @@ class PostsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+
+  def correct_user
+    @micropost = current_user.microposts.find_by_id(params[:id])
+    redirect_to root_path if @micropost.nil?
+  end
+
 end

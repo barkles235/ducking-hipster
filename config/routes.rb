@@ -3,7 +3,7 @@ Posty::Application.routes.draw do
 
   resources :users
 
-  root to: 'users#show'
+  root to: 'users#new'
 
   resources :sessions, only: [:new, :create, :destroy]
   match '/signin',   to: 'sessions#new'

@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="span9">
+<%= form_for [@topic, @info] do |f| %>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+    <%= f.label :text %>
+    <%= f.text_area :text %>
+    <% if params.has_key?(:child_of) %>
+      <%= hidden_field(:info, :child_of, value:params[:child_of]) %>
+    <% else %>
+      <%= f.hidden_field(:child_of) %>
+    <% end %>  
+  <%= hidden_field(:topic, :id) %>
+  
+  <br/>
+    <%= f.submit class:"btn btn-primary"%> <%= link_to "Cancel", topic_infos_path(@topic, @info), class:"btn" %>
+<% end %>
+</div>
+</div>

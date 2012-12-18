@@ -1,0 +1,25 @@
+<h1><%= @topic.name.pluralize %></h1>
+<small>Find me in app/views/infos/index.html.erb</small>
+
+<p>There are <%= @infos.size %> entries on <%= @topic.name.pluralize %> </p>
+ <%= link_to 'Add new info paragraph', new_topic_info_path(@topic), class:'btn btn-success' %>
+
+<% @infos.each do |i| %>
+      <% if i.child_of.nil? then %>
+<ol class="infos">
+  <h2><%= i.title %></h2>
+  <ul class="buttons"><%= link_to 'Add sub info', new_topic_info_path(@topic,child_of:i), class:'btn btn-mini btn-success' %></ul>
+ <li></li>
+  <span class="text"><p><%= i.text %></p></span>
+  </br><p><small>id: <%= i.id %> child_of: <%= i.child_of %></small></p>
+</ol>
+  <% else %>
+<ol class="subinfos">
+  <h3><%= i.title %></h3>
+ <li></li>
+  <p><%= i.text %></p>
+  <p><small>id: <%= i.id %> child_of: <%= i.child_of %></small></p>
+</ol>
+<% end %>
+<% end %>
+

@@ -1,8 +1,13 @@
 Posty::Application.routes.draw do
 
-
-
   resources :users
+
+  resources :topics
+
+  resources :topics do
+    resources :infos, only: [:index, :new, :create, :edit, :update, :destroy]
+  end
+
 
   #root to: 'users#new'
   match '/signup',   to: 'users#new'
@@ -15,6 +20,8 @@ Posty::Application.routes.draw do
 
   resources :posts, only: [:create, :destroy, :index, :show]
   match '/newpost', to: 'posts#create'
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

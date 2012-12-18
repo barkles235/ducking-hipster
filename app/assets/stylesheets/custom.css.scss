@@ -213,9 +213,8 @@ input, textarea, select, .uneditable-input {
   }
 }
 
-/* microposts */
-
-.microposts {
+/* posts */
+.posts {
   list-style: none;
   margin: 10px 0 0 0;
 
@@ -241,3 +240,43 @@ aside {
   }
 }
 
+/* infos */
+.infos {
+    list-style: none;
+    margin: 10px 0 0 0;
+    li {
+	padding: 10px 0;
+	border-top: 1px solid #e8e8e8;
+    }
+    h2 {
+	text-align: left;
+	margin-bottom: 10px;
+    }
+
+.text{
+    float: left;
+    margin-right: 10px;
+}
+
+}
+
+
+.buttons {
+  float: right;
+  margin-left: 10px;
+}
+
+
+.subinfos{
+  list-style: none;
+  padding: 20px 0 0 0;
+  li {
+    padding: 20px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+
+}
+
+.text {
+  display: block;
+}

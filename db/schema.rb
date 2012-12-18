@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121217211152) do
+ActiveRecord::Schema.define(:version => 20121218170057) do
+
+  create_table "infos", :force => true do |t|
+    t.string   "title"
+    t.text     "text"
+    t.integer  "topic_id"
+    t.integer  "child_of"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "posts", :force => true do |t|
     t.text     "body"
@@ -20,16 +29,24 @@ ActiveRecord::Schema.define(:version => 20121217211152) do
     t.integer  "user_id"
   end
 
+  create_table "topics", :force => true do |t|
+    t.string   "name"
+    t.string   "systematic_name"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "password"
     t.string   "password_digest"
     t.text     "bio"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
     t.string   "password_confirmation"
     t.string   "remember_token"
     t.string   "email"
+    t.integer  "admin_level",           :default => 0
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

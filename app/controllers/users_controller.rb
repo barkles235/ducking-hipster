@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
-  before_filter :signed_in_user, only: [:edit, :update]
-
+  before_filter :signed_in_user, only: [:index, :edit, :update]
+  before_filter :correct_user,   only: [:edit, :update]
+  before_filter :admin_user,     only: :destroy
   # GET /users
   # GET /users.json
   def index
@@ -12,6 +13,11 @@ class UsersController < ApplicationController
     end
   end
 
+  def feed
+    Post.where("user_id = ?", id)
+  end
+
+
   # GET /users/1
   # GET /users/1.json
   def show
@@ -21,6 +27,7 @@ class UsersController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @user }
     end
+  #  @post = current_user.posts.build if signed_in?
   end
 
   # GET /users/new
@@ -41,20 +48,29 @@ class UsersController < ApplicationController
 
   # POST /users
   # POST /users.json
+  # def create
+  #   @user = User.new(params[:user])
+
+  #   respond_to do |format|
+  #     if @user.save
+  #       format.html { redirect_to @user, notice: 'User was successfully created.' }
+  #       format.json { render json: @user, status: :created, location: @user }
+  #     else
+  #       format.html { render action: "new" }
+  #       format.json { render json: @user.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
   def create
     @user = User.new(params[:user])
-
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render json: @user, status: :created, location: @user }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    if @user.save
+      sign_in @user
+      flash[:success] = "Welcome to the Sample App!"
+      redirect_to @user
+    else
+      render 'new'
     end
   end
-
   # PUT /users/1
   # PUT /users/1.json
   def update

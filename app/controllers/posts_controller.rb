@@ -1,6 +1,6 @@
 class PostsController < ApplicationController
   before_filter :signed_in_user
-#  before_filter :correct_user, only: :destroy
+  before_filter :correct_user, only: :destroy
 
   # GET /posts
   # GET /posts.json
@@ -26,17 +26,29 @@ class PostsController < ApplicationController
 
   # GET /posts/new
   # GET /posts/new.json
-  def new
+  # def new
+  #   @post = Post.new
+  #   respond_to do |format|
+  #     format.html # new.html.erb
+  #     format.json { render json: @post }
+  #   end
+  # end
+
+  def create
     @post = current_user.posts.build(params[:post])
     if @post.save
       flash[:success] = "post created!"
-      redirect_to 'posts#index'
+      redirect_to root_path
+    else
+      @feed_items = []
+      # render 'posts/index'
+      render show_user_path(current_user)
     end
-    # @post = Post.new
-    # respond_to do |format|
-    #   format.html # new.html.erb
-    #   format.json { render json: @post }
-    # end
+  end
+
+  def destroy
+    @post.destroy
+    redirect_to root_path
   end
 
   # GET /posts/1/edit
@@ -46,19 +58,19 @@ class PostsController < ApplicationController
 
   # POST /posts
   # POST /posts.json
-  def create
-    @post = Post.new(params[:post])
+  # def create
+  #   @post = Post.new(params[:post])
 
-    respond_to do |format|
-      if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
-        format.json { render json: @post, status: :created, location: @post }
-      else
-        format.html { render action: "new" }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if @post.save
+  #       format.html { redirect_to @post, notice: 'Post was successfully created.' }
+  #       format.json { render json: @post, status: :created, location: @post }
+  #     else
+  #       format.html { render action: "new" }
+  #       format.json { render json: @post.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # PUT /posts/1
   # PUT /posts/1.json
@@ -91,8 +103,8 @@ class PostsController < ApplicationController
   private
 
   def correct_user
-    @micropost = current_user.microposts.find_by_id(params[:id])
-    redirect_to root_path if @micropost.nil?
+    @post = current_user.posts.find_by_id(params[:id])
+    redirect_to root_path if @post.nil?
   end
 
 end

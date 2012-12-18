@@ -4,7 +4,7 @@
 <p>There are <%= @infos.size %> entries on <%= @topic.name.pluralize %> </p>
  <%= link_to 'Add new info paragraph', new_topic_info_path(@topic), class:'btn btn-success' %>
 
-<% @infos.each do |i| %>
+<% @sorted_infos.each do |i| %>
       <% if i.child_of.nil? then %>
 <ol class="infos">
   <h2><%= i.title %></h2>

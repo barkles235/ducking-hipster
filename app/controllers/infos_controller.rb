@@ -23,20 +23,28 @@ class InfosController < ApplicationController
     @topic = Topic.find(params[:topic_id])
     @infos = @topic.infos
 
-    # @parents = []
-    # @parents_hash = Hash.new
-    # @children = []
+    @parents = []
+    @children = []
 
-    # @infos.each{ |i|
-    #   if(i.child_of.nil?) then
-    #     @parents.push(i)
-    #     @parents_hash[i] = Array.new
-    #   else
-    #     @children.push(i)
-    #   end
-    #   }
+    @infos.each{ |i|
+      if(i.child_of.nil?) then
+        @parents.push(i)
+      else
+        @children.push(i)
+      end
+      }
 
-   # @top_infos = @infos.reject{|i| !(i.child_of.nil?)}
+    @sorted_infos = []
+    # could sort parents by score here, prior to kids
+    @parents.each{ |p|
+      @sorted_infos.push(p)
+      @children.each{ |c|
+        if c.child_of == p.id then
+          @sorted_infos.push(c)
+          @children.delete(c)
+          end
+      }
+    }
 
 
   end

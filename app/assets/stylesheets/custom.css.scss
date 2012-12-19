@@ -54,7 +54,7 @@ h2 {
   margin-bottom: 30px;
   text-align: center;
   font-weight: normal;
-  color: $grayLight;
+  /* color: $grayLight; */
 }
 
 p {
@@ -262,8 +262,8 @@ aside {
 
 
 .buttons {
-  float: right;
-  margin-left: 10px;
+   float: right;
+  /* margin-left: 10px; */
 }
 
 
@@ -271,7 +271,7 @@ aside {
   list-style: none;
   padding: 20px 0 0 0;
   li {
-    padding: 20px 0;
+    padding: 20px 0 0 0;
     border-top: 1px solid #e8e8e8;
   }
 

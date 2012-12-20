@@ -3,6 +3,9 @@
     <div class="container">
       <%= link_to "Posty", root_path, id: "logo" %>
       <nav>
+        <ul class="nav pull-left">
+            <li><%= link_to "Topics", topics_path %></li>
+	  </ul>
         <ul class="nav pull-right">
           <li><%= link_to "Home",    root_path %></li>
           <% if signed_in? %>

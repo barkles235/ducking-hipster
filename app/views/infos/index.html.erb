@@ -1,6 +1,18 @@
-<h1><%= @topic.name.pluralize %></h1>
-<span class="center"><p> <%= link_to 'Add new info paragraph', new_topic_info_path(@topic), class:'btn btn-info' %></p>
-  <p>There are <%= @infos.size %> entries on <%= @topic.name.pluralize %> </p>
+
+
+<h1>
+<% if @topic.name.split(' ').size < 2  %>
+<%= @topic.name.pluralize %>
+<% else %>
+<%= @topic.name %>
+<% end %>
+</h1>
+
+<span class="center">
+  <p>There are <%= @infos.size %> entries on <%= @topic.name %>  <em> (<%= @topic.systematic_name %>) </em> </p>
+  <% if signed_in? %>
+  <p> <%= link_to 'Add new info paragraph', new_topic_info_path(@topic), class:'btn btn-info' %></p>
+  <% end %>
 </span>
 <% @sorted_infos.each do |i| %>
 <% if i.child_of.nil? then %>
@@ -8,27 +20,32 @@
     <ol class="infos">
       <h2><%= i.title %></h2>
 
+      <% if signed_in? %>
       <div class="btn-group">
 	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 	  Action
 	  <span class="caret"></span>
 	</a>
 	<ul class="dropdown-menu">
-	    <!-- <%= link_to 'Add sub info', new_topic_info_path(@topic,child_of:i), class:'btn btn-info' %> -->
 	    <%= link_to 'Add sub info', new_topic_info_path(@topic,child_of:i) %>
 	    <%= link_to "Delete info", { :action => "destroy", :id => i.id }, :confirm => "Are you sure?", :method => :delete %>
 	</ul>
       </div>
 
 	  <span class="buttons">
+	    <% if i.relative_layout > 0 then %>
 	    <%= button_to '+', promote_topic_info_path(@topic,i), class:'btn btn-mini'  %>
+	    <% end %>
 	    <%= button_to '-', demote_topic_info_path(@topic,i), class:'btn btn-mini'  %>
 	  </span>
+	  <% end %>
 
       <li></li>
 	  <p><%= i.text %></p>
-	  </br><p><small>id: <%= i.id %> layout: <%= i.relative_layout %> child_of: <%= i.child_of %></small></p>
-	  </br><p><small>child_count: <%= @sorted_infos.count{|x| x.child_of == i.id } %> </small></p>
+	<% if signed_in? %>
+	  </br><p><small>id: <%= i.id %> layout: <%= i.relative_layout %> child_count: <%= @sorted_infos.count{|x| x.child_of == i.id } %> child_of: <%= i.child_of %></small></p>
+	  <% end %>
+
     </ol>
 </div>
 <% else %>
@@ -36,18 +53,24 @@
     <ol class="subinfos">
       <h3><%= i.title %></h3>
 
+      <% if signed_in? %>
       <span class="buttons">
+	    <% if i.relative_layout > 0 then %>
       	<%= button_to '+', promote_topic_info_path(@topic,i),class:'btn'%>
+	    <% end %>
       	<%= button_to '-', demote_topic_info_path(@topic,i), class:'btn'%>
       	<%= button_to "Delete", { :action => "destroy", :id => i.id }, :confirm => "Are you sure?", :method => :delete, class:'btn-danger' %>
       	</span>
+      <% end %>
 
       <li></li>
 
 	<p><%= i.text %></p>
-	<p><small>id: <%= i.id %> layout: <%= i.relative_layout %> child_of: <%= i.child_of %></small></p>
-	  </br><p><small>child_count: <%= @sorted_infos.count{|x| x.child_of == i.id } %> </small></p>
+	<% if signed_in? %>
+	<p><small>id: <%= i.id %> layout: <%= i.relative_layout %> child_count: <%= @sorted_infos.count{|x| x.child_of == i.id } %> child_of: <%= i.child_of %></small></p>
+	<% end %>
     </ol>
+
 </div>
 <% end %>
 <% end %>

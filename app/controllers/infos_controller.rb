@@ -64,14 +64,6 @@ class InfosController < ApplicationController
       redirect_to topic_infos_path(@topic), notice: "Demotion failed. Moving:#{@info.id}"
     end
 
-    # # Simple "voting" demotion
-    # new_relative_layout = @info.relative_layout + 1
-    # if @info.update_attributes(:relative_layout => new_relative_layout)
-    #   redirect_to topic_infos_path(@topic), notice: 'demotion succeeded'
-    # else
-    #   redirect_to topic_infos_path(@topic), notice: 'demotion failed'
-    # end
-
   end
 
 
@@ -105,14 +97,6 @@ class InfosController < ApplicationController
       redirect_to topic_infos_path(@topic), notice: "Promotion failed. Moving:#{@info.id}"
     end
 
-    # # Simple "voting" promotion
-    # new_relative_layout = @info.relative_layout - 1
-    # if @info.update_attributes(:relative_layout => new_relative_layout)
-    #   redirect_to topic_infos_path(@topic), notice: 'promotion succeeded'
-    # else
-    #   redirect_to topic_infos_path(@topic), notice: 'promotion failed'
-    # end
-
   end
 
 
@@ -136,11 +120,12 @@ class InfosController < ApplicationController
 
     @sorted_infos = []
     parents.each_with_index{ |p,px|
-     if p.relative_layout != px then p.update_attributes(:relative_layout => px) end # costly?
+       if p.relative_layout != px then p.update_attributes(:relative_layout => px) end # repaired corruption from previous sorting regime
       @sorted_infos.push(p)
       children.each{ |c|
         if c.child_of == p.id then
           @sorted_infos.push(c)
+      #    children.delete(c)
           end
       }
     }

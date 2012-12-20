@@ -46,15 +46,25 @@ class InfosController < ApplicationController
 
     @neighbor = Info.find_by_child_of_and_relative_layout(is_child_of,prospective_layout)
 
+    # If @info.child_of.nil? then the find above will behave with unpredictable results
+    # So, we search for parental neighbors here:
+    if @info.child_of.nil? then
+      @infos = @topic.infos
+      parents = @infos.reject{|i| !i.child_of.nil? }
+      parents.sort_by!{ |x| x.relative_layout }
+      parents.each{ |x| if x.relative_layout == prospective_layout then @neighbor = x end }
+      end
+
     if (@neighbor != nil and
         @info.update_attributes(:relative_layout => prospective_layout) and
         @neighbor.update_attributes(:relative_layout => current_layout)
         )
-      redirect_to topic_infos_path(@topic), notice: 'demotion succeeded.'
+      redirect_to topic_infos_path(@topic), notice: "Demotion succeeded. Moving:#{@info.id}"
     else
-      redirect_to topic_infos_path(@topic), notice: 'demotion failed'
+      redirect_to topic_infos_path(@topic), notice: "Demotion failed. Moving:#{@info.id}"
     end
 
+    # # Simple "voting" demotion
     # new_relative_layout = @info.relative_layout + 1
     # if @info.update_attributes(:relative_layout => new_relative_layout)
     #   redirect_to topic_infos_path(@topic), notice: 'demotion succeeded'
@@ -71,19 +81,31 @@ class InfosController < ApplicationController
 
     current_layout = @info.relative_layout
     prospective_layout = current_layout - 1
+    if prospective_layout < 0 then prospective_layout = 0 end
+
     is_child_of = @info.child_of
 
     @neighbor = Info.find_by_child_of_and_relative_layout(is_child_of,prospective_layout)
+
+    # If @info.child_of.nil? then the find above will behave with unpredictable results
+    # So, we search for parental neighbors here:
+    if @info.child_of.nil? then
+      @infos = @topic.infos
+      parents = @infos.reject{|i| !i.child_of.nil? }
+      parents.sort_by!{ |x| x.relative_layout }
+      parents.each{ |x| if x.relative_layout == prospective_layout then @neighbor = x end }
+      end
 
     if (@neighbor != nil and
         @info.update_attributes(:relative_layout => prospective_layout) and
         @neighbor.update_attributes(:relative_layout => current_layout)
         )
-      redirect_to topic_infos_path(@topic), notice: 'promotion succeeded.'
+      redirect_to topic_infos_path(@topic), notice: "Promotion succeeded. Moving:#{@info.id}"
     else
-      redirect_to topic_infos_path(@topic), notice: 'promotion failed'
+      redirect_to topic_infos_path(@topic), notice: "Promotion failed. Moving:#{@info.id}"
     end
 
+    # # Simple "voting" promotion
     # new_relative_layout = @info.relative_layout - 1
     # if @info.update_attributes(:relative_layout => new_relative_layout)
     #   redirect_to topic_infos_path(@topic), notice: 'promotion succeeded'
@@ -114,7 +136,7 @@ class InfosController < ApplicationController
 
     @sorted_infos = []
     parents.each_with_index{ |p,px|
-      if p.relative_layout != px then p.update_attributes(:relative_layout => px) end # costly?
+     if p.relative_layout != px then p.update_attributes(:relative_layout => px) end # costly?
       @sorted_infos.push(p)
       children.each{ |c|
         if c.child_of == p.id then
@@ -133,16 +155,17 @@ class InfosController < ApplicationController
   def destroy
     @topic = Topic.find(params[:topic_id])
     @info = Info.find(params[:id])
-    @infos = @topic.infos
-    @sorted_infos = @infos.sort_by{ |a| [a.relative_layout] }
-    @child_count = @sorted_infos.count{|x| x.child_of == @info.id }
-    if
-        @sorted_infos.count{|x| x.child_of == @info.id } > 0
-    then
-      #flash[:failure] = "Could not delete! #{@child_count} #{@info.id} #{@infos.each{|x| puts x.child_of }}"
-      flash[:failure] = "Could not delete! #{@child_count} children to info id:#{@info.id} "
-    else
+    if @info.child_of != nil then # If we have a non-parent node.
       @info.destroy
+    else                          # If we have a parent node we must check for children.
+      @infos = @topic.infos
+      @sorted_infos = @infos.sort_by{ |a| [a.relative_layout] }
+      @child_count = @sorted_infos.count{|x| x.child_of == @info.id }
+      if @sorted_infos.count{|x| x.child_of == @info.id } > 0 then
+        flash[:failure] = "Could not delete! This item has #{@child_count} subitem(s)"
+      else
+        @info.destroy
+      end
     end
     redirect_to topic_infos_path(@topic)
   end

@@ -5,7 +5,12 @@ Posty::Application.routes.draw do
   resources :topics
 
   resources :topics do
-    resources :infos, only: [:index, :new, :create, :edit, :update, :destroy]
+    resources :infos, only: [:index, :new, :create, :edit, :update, :delete, :destroy, :demote] do
+      member do
+        post 'demote'
+        post 'promote'
+      end
+    end
   end
 
 

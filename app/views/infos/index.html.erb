@@ -71,6 +71,11 @@
       <% end %>
 
       <li></li>
+      <% pics = i.images %>
+      <% pics.each do |p| %>
+      <p><%=  p.name  %></p>
+      <%= image_tag p.pic.url(:medium) %>
+      <% end %>
 
 	<p><%= i.text %></p>
 	<% if signed_in? %>

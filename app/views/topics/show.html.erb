@@ -2,3 +2,12 @@
 
 <p><bold> There are <%= @topic.infos.count %> items posted in the </bold>
 <%= link_to "Wiki", topic_infos_path(@topic) %></p>
+
+<% infos = @topic.infos %>
+<% infos.each do |i|  %>
+<% pics = i.images  %>
+<% pics.each do |p| %>
+<p><%=  p.name  %></p>
+<%= image_tag p.pic.url(:thumb) %>
+<% end %>
+<% end %>

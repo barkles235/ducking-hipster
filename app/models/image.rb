@@ -5,7 +5,8 @@ class Image < ActiveRecord::Base
   has_attached_file :pic, styles: {
     thumb: '100x100>',
     square: '200x200#',
-    medium: '300x300>'
+    medium: '300x300>',
+    large: '800x800>'
   }
 
 end

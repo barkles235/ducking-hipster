@@ -5,13 +5,19 @@
     <%= f.text_field :title %>
     <%= f.label :text %>
     <%= f.text_area :text %>
+
+  <%= f.fields_for :images do |builder| %>
+    <%= render "image_fields", :f => builder %>
+  <% end %>
+
+
     <% if params.has_key?(:child_of) %>
       <%= hidden_field(:info, :child_of, value:params[:child_of]) %>
     <% else %>
       <%= f.hidden_field(:child_of) %>
-    <% end %>  
+    <% end %>
   <%= hidden_field(:topic, :id) %>
-  
+
   <br/>
     <%= f.submit class:"btn btn-primary"%> <%= link_to "Cancel", topic_infos_path(@topic, @info), class:"btn" %>
 <% end %>

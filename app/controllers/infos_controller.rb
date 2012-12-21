@@ -1,14 +1,17 @@
 class InfosController < ApplicationController
 
   def new
-     @topic = Topic.find(params[:topic_id])
-     @info = Info.new
+    @topic = Topic.find(params[:topic_id])
+    @info = Info.new
+    @info.images.build
+
   end
 
 
   def create
     current_topic = Topic.find(params[:topic_id])
     @info = current_topic.infos.build(params[:info])
+ #  @info = current_topic.infos.images.build(params[:info])
 
     @infos = current_topic.infos
     new_layout = 0

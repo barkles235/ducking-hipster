@@ -41,7 +41,14 @@
 	  <% end %>
 
       <li></li>
-	  <p><%= i.text %></p>
+
+      <% pics = i.images %>
+      <% pics.each do |p| %>
+      <p><%=  p.name  %></p>
+      <%= image_tag p.pic.url(:medium) %>
+      <% end %>
+
+<p><%= i.text %></p>
 	<% if signed_in? %>
 	  </br><p><small>id: <%= i.id %> layout: <%= i.relative_layout %> child_count: <%= @sorted_infos.count{|x| x.child_of == i.id } %> child_of: <%= i.child_of %></small></p>
 	  <% end %>

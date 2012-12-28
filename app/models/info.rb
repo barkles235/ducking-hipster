@@ -3,4 +3,5 @@ class Info < ActiveRecord::Base
   belongs_to :topic
   has_many :images, :as => :imageable
   accepts_nested_attributes_for :images, :reject_if => :all_blank
+  resourcify
 end

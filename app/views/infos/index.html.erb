@@ -10,7 +10,7 @@
 
 <span class="center">
   <p>There are <%= @infos.size %> entries on <%= @topic.name %>  <em> (<%= @topic.systematic_name %>) </em> </p>
-  <% if signed_in? %>
+  <% if signed_in? and (current_user.has_role? :admin) %>
   <p> <%= link_to 'Add new info paragraph', new_topic_info_path(@topic), class:'btn btn-info' %></p>
   <% end %>
 </span>

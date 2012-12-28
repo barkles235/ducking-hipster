@@ -10,7 +10,7 @@ gem 'bootstrap-will_paginate', '0.0.5'
 gem 'thin'
 gem 'paperclip'
 gem 'aws-sdk'
-
+gem 'rolify'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'

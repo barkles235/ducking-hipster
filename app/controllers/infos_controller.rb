@@ -4,7 +4,6 @@ class InfosController < ApplicationController
     @topic = Topic.find(params[:topic_id])
     @info = Info.new
     @info.images.build
-
   end
 
 
@@ -29,11 +28,33 @@ class InfosController < ApplicationController
     @info.relative_layout = new_layout
 
     if @info.save
-      flash[:success] = 'Info paragraph created!'
-      redirect_to topic_infos_path
+      #flash[:success] = 'Info paragraph created!'
+      #redirect_to topic_infos_path
+
+     respond_to do |format|
+
+        # format.html {
+        #   render :json => [@info.to_jq_upload].to_json,
+        #   :content_type => 'text/html',
+        #   :layout => false
+        # }
+
+    #    format.json { render json: [@info.to_jq_upload].to_json, status: :created, location: @upload }
+    #    format.json { render json: [@info.to_jq_upload].to_json, status: :created }
+#        format.json { render json: [@info.to_jq_upload].to_json, status: :created }
+     format.json { render json: [@info.to_jq_upload], status: :created }
+
+        # too few args?
+        #format.json { render :json => [@info.to_jq_upload], status: :created }
+   #     format.json { render :json => [@info.to_jq_upload], status: :created }
+
+
+      end
     else
-      render action: "new"
-    end
+      #render action: "new"
+     render :json => [{:error => "custom_failure"}], :status => 304
+   end
+
   end
 
   def edit
@@ -157,10 +178,6 @@ class InfosController < ApplicationController
     end
     redirect_to topic_infos_path(@topic)
   end
-
-
-
-
 
 
 

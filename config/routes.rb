@@ -13,6 +13,7 @@ Posty::Application.routes.draw do
     end
   end
 
+  resources :images # needed to find delete path for jquery-fileupload
 
   #root to: 'users#new'
   match '/signup',   to: 'users#new'

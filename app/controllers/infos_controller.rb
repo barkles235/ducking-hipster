@@ -39,14 +39,14 @@ class InfosController < ApplicationController
         #   :layout => false
         # }
 
-    #    format.json { render json: [@info.to_jq_upload].to_json, status: :created, location: @upload }
-    #    format.json { render json: [@info.to_jq_upload].to_json, status: :created }
-#        format.json { render json: [@info.to_jq_upload].to_json, status: :created }
-     format.json { render json: [@info.to_jq_upload], status: :created }
 
-        # too few args?
-        #format.json { render :json => [@info.to_jq_upload], status: :created }
-   #     format.json { render :json => [@info.to_jq_upload], status: :created }
+        format.json { render json: [@info.images[0].as_json(  # must call on single image... at least to get working with example jq_upload code
+                                                      :only => [:name],
+                                                      :methods => [:url, :thumbnail_url, :delete_url, :delete_type, :size]
+                                                         )] }
+
+
+
 
 
       end

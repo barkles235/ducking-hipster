@@ -22,14 +22,47 @@ class Image < ActiveRecord::Base
 
   include Rails.application.routes.url_helpers
 
-  def to_jq_json
-    {
-      "name" => read_attribute(:pic_file_name),
-      "size" => read_attribute(:pic_file_size),
-      "url" => pic.url(:original),
-      "delete_url" => image_path(self),
-      "delete_type" => "DELETE"
-    }
+  # def to_jq_json
+  #   {
+  #     "name" => read_attribute(:pic_file_name),
+  #     "size" => read_attribute(:pic_file_size),
+  #     "url" => pic.url(:original),
+  #     "delete_url" => image_path(self),
+  #     "delete_type" => "DELETE"
+  #   }
+  # end
+
+
+  # def to_json
+  #   {
+  #     "name" => read_attribute(:pic_file_name),
+  #     "size" => read_attribute(:pic_file_size),
+  #     "url" => pic.url(:original),
+  #     "delete_url" => image_path(self),
+  #     "delete_type" => "DELETE"
+  #   }
+  # end
+
+
+  def url
+    return pic.url(:original)
+  end
+
+  def delete_url
+    image_path(self)
+  end
+
+  def thumbnail_url
+    return pic.url(:thumbnail)
+  end
+
+
+  def delete_type
+    return "DELETE"
+  end
+
+  def size
+    return  read_attribute(:pic_file_size)
   end
 
 
